@@ -58,7 +58,7 @@ jobs:
 
       - name: Post-build static verification
         run: |
-          set -eux
+          set -euxo pipefail
           test -f "bin/${IMAGE}"
           test -f dtb_combined.bin
           file "bin/${IMAGE}"

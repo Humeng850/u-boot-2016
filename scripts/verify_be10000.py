@@ -33,8 +33,8 @@ def main():
     e_type, e_machine = struct.unpack_from("<HH", data, 16)
     e_phoff = struct.unpack_from("<I", data, 28)[0]
     e_phentsize, e_phnum = struct.unpack_from("<HH", data, 42)
-    if e_type != 2 or e_machine != 40:
-        fail(f"expected ELF EXEC/ARM, got type={e_type}, machine={e_machine}")
+    if e_type not in (2, 3) or e_machine != 40:
+        fail(f"expected ARM ELF EXEC or DYN, got type={e_type}, machine={e_machine}")
     if not e_phnum or e_phentsize < 32 or e_phoff + e_phnum * e_phentsize > size:
         fail("invalid ELF program-header table")
 
@@ -42,7 +42,8 @@ def main():
     print(f"size={size} bytes (0x{size:x})")
     print(f"appsbl_capacity={APPSBL_CAPACITY} bytes (0x{APPSBL_CAPACITY:x})")
     print(f"appsbl_remaining={APPSBL_CAPACITY - size} bytes")
-    print(f"elf=32-bit little-endian ARM EXEC, program_headers={e_phnum}")
+    elf_type_name = "EXEC" if e_type == 2 else "DYN"
+    print(f"elf=32-bit little-endian ARM {elf_type_name}, program_headers={e_phnum}")
     print(f"sha256={hashlib.sha256(data).hexdigest()}")
 
     if len(sys.argv) == 3:
