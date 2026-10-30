@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Check out fork
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Pre-build board validation
         run: |
