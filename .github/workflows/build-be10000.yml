@@ -48,8 +48,8 @@ jobs:
         run: |
           git clone --depth 1 \
             https://github.com/1980490718/toolchain-arm_cortex-a7_gcc-5.2.0.git \
-            "${GITHUB_WORKSPACE}/staging_dir"
-          test -x "${GITHUB_WORKSPACE}/staging_dir/toolchain-arm_cortex-a7_gcc-5.2.0_musl-1.1.16_eabi/bin/arm-openwrt-linux-gcc"
+            ../staging_dir
+          test -x ../staging_dir/toolchain-arm_cortex-a7_gcc-5.2.0_musl-1.1.16_eabi/bin/arm-openwrt-linux-gcc
 
       - name: Build BE10000 U-Boot
         run: |
