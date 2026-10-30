@@ -1,0 +1,141 @@
+/*
+ * Xiaomi BE10000 (RC01) board support for IPQ9574 U-Boot Webfailsafe.
+ *
+ * Based on Qualcomm reference design IPQ9574-AL02-C4 (RDP433), whose
+ * machid <0x8050301> matches the stock BE10000 APPSBLENV (machid=8050301).
+ *
+ * Hardware facts (from stock kernel DTB / MIBIB / APPSBLENV backups):
+ *   - SoC:      IPQ9570 (IPQ9574 family), 4x Cortex-A73
+ *   - RAM:      2 GiB DDR4 (Nanya NT5AD512M16C4-JR x2), DDR params in CDT
+ *   - Flash:    256 MiB ESMT F50D2G41KA QPIC NAND (flash_type=11)
+ *   - Switch:   QCA8084 (4x 2.5GbE), PHY addresses 1-4
+ *   - 10G PHY:  Marvell/Aquantia AQR113C + SFP+ cage
+ *   - Reset:    GPIO45 (active low), Mesh button: GPIO44
+ *   - LEDs:     sys_white=40, sys_orange=41, net_white=42, net_orange=43,
+ *               sfp_green=62
+ *
+ * Partition layout is NOT hardcoded here: the Webfailsafe reads it at
+ * runtime from SMEM (populated by SBL1 from MIBIB). Works with both the
+ * stock dual-rootfs MIBIB and the merged single-rootfs "big partition"
+ * MIBIB (190 MiB rootfs, no rootfs_1/overlay).
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ */
+
+/dts-v1/;
+#include "ipq9574-al02-c4.dts"
+/ {
+	model = "Xiaomi BE10000 (RC01)";
+	/* machid <0x8050301> inherited from ipq9574-al02-c4.dts */
+	config_name = "config@al02-c4", "config-al02-c4", "config@rdp433", "config-rdp433";
+
+	aliases {
+		power_led = "/tlmm-gpio/led_gpio/led_system_white";
+		blink_led = "/tlmm-gpio/led_gpio/led_system_amber";
+		system_led = "/tlmm-gpio/led_gpio/network-white";
+	};
+
+	tlmm-gpio {
+		led_gpio {
+			led_system_white {
+				gpio = <40>;
+				func = <0>;
+				out = <GPIO_OUT_LOW>;
+				drvstr = <GPIO_8MA>;
+				pull = <GPIO_PULL_DOWN>;
+				oe = <GPIO_OE_ENABLE>;
+			};
+			led_system_amber {
+				gpio = <41>;
+				func = <0>;
+				out = <GPIO_OUT_LOW>;
+				drvstr = <GPIO_8MA>;
+				pull = <GPIO_PULL_DOWN>;
+				oe = <GPIO_OE_ENABLE>;
+			};
+			network-white {
+				gpio = <42>;
+				func = <0>;
+				out = <GPIO_OUT_LOW>;
+				drvstr = <GPIO_8MA>;
+				pull = <GPIO_PULL_DOWN>;
+				oe = <GPIO_OE_ENABLE>;
+			};
+			network-amber {
+				gpio = <43>;
+				func = <0>;
+				out = <GPIO_OUT_LOW>;
+				drvstr = <GPIO_8MA>;
+				pull = <GPIO_PULL_DOWN>;
+				oe = <GPIO_OE_ENABLE>;
+			};
+			sfp-green {
+				gpio = <62>;
+				func = <0>;
+				out = <GPIO_OUT_LOW>;
+				drvstr = <GPIO_8MA>;
+				pull = <GPIO_PULL_DOWN>;
+				oe = <GPIO_OE_ENABLE>;
+			};
+		};
+
+		key_gpio {
+			reset {
+				gpio = <45>;
+				func = <0>;
+				drvstr = <GPIO_8MA>;
+				pull = <GPIO_PULL_UP>;
+				oe = <GPIO_OE_DISABLE>;
+			};
+			mesh {
+				gpio = <44>;
+				func = <0>;
+				drvstr = <GPIO_8MA>;
+				pull = <GPIO_PULL_UP>;
+				oe = <GPIO_OE_DISABLE>;
+			};
+		};
+	};
+
+	ess-switch {
+		/* same MAC modes as stock BE10000 kernel DTB: 0x15/0xd/0xe */
+		switch_mac_mode0 = <PORT_WRAPPER_UQXGMII>;
+		switch_mac_mode1 = <PORT_WRAPPER_USXGMII>;
+		switch_mac_mode2 = <PORT_WRAPPER_USXGMII>;
+		qca808x_gpio = <60>;
+		qca808x_gpio_cnt = <1>;
+		aquantia_gpio = <36>;
+		aquantia_gpio_cnt = <1>;
+		aquantia_port = <4 5>;
+		aquantia_port_cnt = <2>;
+		mdc_mdio_gpio = <38 39>;
+		port_phyinfo {
+			port@0 {
+				phy_address = <1>;
+				phy_type = <QCA8084_PHY_TYPE>;
+			};
+			port@1 {
+				phy_address = <2>;
+				phy_type = <QCA8084_PHY_TYPE>;
+			};
+			port@2 {
+				phy_address = <3>;
+				phy_type = <QCA8084_PHY_TYPE>;
+			};
+			port@3 {
+				phy_address = <4>;
+				phy_type = <QCA8084_PHY_TYPE>;
+			};
+			port@4 {
+				phy_address = <8>;
+				phy_type = <AQ_PHY_TYPE>;
+			};
+			port@5 {
+				phy_address = <0>;
+				phy_type = <AQ_PHY_TYPE>;
+			};
+		};
+	};
+};

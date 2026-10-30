@@ -108,6 +108,7 @@ cd u-boot-2016
 | IPQ807x | ipq807x_xglink_5gcpe                   | XGlink 5GCPE                      |       0x08010008       |    ✓     | `./build.sh ipq807x_xglink_5gcpe`                   |
 | IPQ807x | ipq807x                                | 公版基础                          |      Multi-machid      |    ✓     | `./build.sh ipq807x`                                |
 | IPQ9574 | ipq9574_xiaomi_be7000                  | 小米 BE7000                       |       0x8050501        |    ✓     | `./build.sh ipq9574_xiaomi_be7000`                  |
+| IPQ9574 | ipq9574_xiaomi_be10000                 | 小米 BE10000 (RC01)               |       0x8050301        |    ×     | `./build.sh ipq9574_xiaomi_be10000`                 |
 | IPQ9574 | ipq9574                                | 公版基础                          |      Multi-machid      |    ✓     | `./build.sh ipq9574`                                |
 
 </details>

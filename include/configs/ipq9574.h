@@ -372,7 +372,7 @@ extern loff_t board_env_size;
 /*
  * MMC configs
  */
-#ifndef CONFIG_IPQ9574_XIAOMI_BE7000
+#if !defined(CONFIG_IPQ9574_XIAOMI_BE7000) && !defined(CONFIG_IPQ9574_XIAOMI_BE10000)
 #define CONFIG_QCA_MMC
 #endif
 
