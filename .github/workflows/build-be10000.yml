@@ -60,9 +60,10 @@ jobs:
         run: |
           set -eux
           test -f "bin/${IMAGE}"
+          test -f dtb_combined.bin
           file "bin/${IMAGE}"
-          ls -l "bin/${IMAGE}" u-boot-dtb.bin
-          python3 scripts/verify_be10000.py "bin/${IMAGE}" u-boot-dtb.bin | tee verification.txt
+          ls -l "bin/${IMAGE}" dtb_combined.bin
+          python3 scripts/verify_be10000.py "bin/${IMAGE}" dtb_combined.bin | tee verification.txt
           sha256sum "bin/${IMAGE}" | tee SHA256SUMS.txt
           cp "bin/${IMAGE}" "${IMAGE}"
 
